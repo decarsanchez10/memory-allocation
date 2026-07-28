@@ -88,6 +88,9 @@ public class MainController {
             alloc,
             lastFF.unallocatedProcesses.size()
         );
+
+        // Start queue animation
+        view.getQueuePanel().startAnimation(lastFF);
     }
 
     // ── Clear ─────────────────────────────────────────────────────────────
@@ -105,6 +108,7 @@ public class MainController {
         view.getVisualizerPanel().updateBlocks(new ArrayList<>(), false);
         view.getResultsPage().updateResults(lastFF, lastBF);
         view.getSummaryCards().updateStats(0, 0, 0, 0, 0, 0);
+        view.getQueuePanel().reset();
     }
 
     // ── Load Example ──────────────────────────────────────────────────────

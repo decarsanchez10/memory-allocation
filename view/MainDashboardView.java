@@ -21,6 +21,7 @@ public class MainDashboardView extends JFrame {
     private LeftSidebar           sidebar;
     private SummaryCardsPanel     summaryCards;
     private MemoryVisualizerPanel visualizerPanel;
+    private ProcessQueuePanel     queuePanel;        // queue animation panel
     private ResultsPage           resultsPage;       // standalone Results page
 
     private JPanel      contentArea;
@@ -82,9 +83,30 @@ public class MainDashboardView extends JFrame {
         summaryCards.setPreferredSize(new Dimension(0, 135));
         page.add(summaryCards, BorderLayout.NORTH);
 
-        // Visualizer (full height)
+        // Queue animation panel (left) + Visualizer (right) in a split pane
+        queuePanel      = new ProcessQueuePanel();
         visualizerPanel = new MemoryVisualizerPanel();
-        page.add(visualizerPanel, BorderLayout.CENTER);
+
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, queuePanel, visualizerPanel);
+        split.setOpaque(false);
+        split.setDividerSize(6);
+        split.setResizeWeight(0.32);           // queue gets ~32% by default
+        split.setBorder(BorderFactory.createEmptyBorder());
+        split.setDividerLocation(0.32);
+        // Make the divider blend with the dark theme
+        split.setUI(new javax.swing.plaf.basic.BasicSplitPaneUI() {
+            @Override
+            public javax.swing.plaf.basic.BasicSplitPaneDivider createDefaultDivider() {
+                return new javax.swing.plaf.basic.BasicSplitPaneDivider(this) {
+                    @Override
+                    public void paint(Graphics g) {
+                        g.setColor(new Color(91, 134, 182, 60));
+                        g.fillRect(0, 0, getWidth(), getHeight());
+                    }
+                };
+            }
+        });
+        page.add(split, BorderLayout.CENTER);
 
         return page;
     }
@@ -109,5 +131,6 @@ public class MainDashboardView extends JFrame {
     public LeftSidebar           getSidebar()         { return sidebar; }
     public SummaryCardsPanel     getSummaryCards()    { return summaryCards; }
     public MemoryVisualizerPanel getVisualizerPanel() { return visualizerPanel; }
+    public ProcessQueuePanel     getQueuePanel()      { return queuePanel; }
     public ResultsPage           getResultsPage()     { return resultsPage; }
 }
