@@ -27,7 +27,7 @@ public class MainDashboardView extends JFrame {
     private CardLayout  cardLayout;
 
     public MainDashboardView() {
-        setTitle("Memory Allocation Simulator \u2014 Pro Dashboard");
+        setTitle("Memory Allocator \u2014 Pro Dashboard");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1500, 1000);
         setMinimumSize(new Dimension(1100, 720));

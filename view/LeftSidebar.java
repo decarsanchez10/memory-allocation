@@ -3,7 +3,6 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-
 /**
  * LeftSidebar with a gradient background, logo with gradient text icon,
  * and better-spaced navigation buttons.
@@ -53,7 +52,7 @@ public final class LeftSidebar extends JPanel {
         logoIcon.setPreferredSize(new Dimension(40, 40));
         logoIcon.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JLabel logoText = new JLabel("Memory Allocation Simulator");
+        JLabel logoText = new JLabel("Memory Allocator");
         logoText.setFont(new Font("Segoe UI", Font.BOLD, 15));
         logoText.setForeground(ModernUI.TEXT_PRIMARY);
 
@@ -127,9 +126,9 @@ public final class LeftSidebar extends JPanel {
         actionsPanel.setOpaque(false);
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(12, 0, 0, 0));
 
-        runBtn = new RoundedButton("Run Simulation", ">", ModernUI.SUCCESS); 
-        clearBtn = new RoundedButton("Clear All", "X", ModernUI.ORANGE); 
-        exampleBtn = new RoundedButton("Load Example", "+", ModernUI.ACCENT_BLUE); 
+        runBtn = new RoundedButton("Run Simulation", ">", ModernUI.SUCCESS);
+        clearBtn = new RoundedButton("Clear All", "X", ModernUI.ORANGE);
+        exampleBtn = new RoundedButton("Load Example", "+", ModernUI.ACCENT_BLUE);
 
         actionsPanel.add(runBtn);
         actionsPanel.add(clearBtn);
