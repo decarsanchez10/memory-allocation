@@ -71,7 +71,7 @@ public final class LeftSidebar extends JPanel {
         col.add(vgap(8));
 
         numBlocksField = new RoundedTextField("5");
-        RoundedButton setMemBtn = new RoundedButton("Set", "", ModernUI.ACCENT_BLUE);
+        RoundedButton setMemBtn = new RoundedButton("Set", "set", ModernUI.ACCENT_BLUE);
         setMemBtn.setPreferredSize(new Dimension(52, 30));
         setMemBtn.setMaximumSize(new Dimension(52, 30));
         JPanel memRow = makeFieldRow(numBlocksField, setMemBtn, "Blocks:");
@@ -90,7 +90,7 @@ public final class LeftSidebar extends JPanel {
         col.add(vgap(8));
 
         numProcessesField = new RoundedTextField("4");
-        RoundedButton setProcBtn = new RoundedButton("Set", "", ModernUI.ACCENT_BLUE);
+        RoundedButton setProcBtn = new RoundedButton("Set", "set", ModernUI.ACCENT_BLUE);
         setProcBtn.setPreferredSize(new Dimension(52, 30));
         setProcBtn.setMaximumSize(new Dimension(52, 30));
         JPanel procRow = makeFieldRow(numProcessesField, setProcBtn, "Procs:");
@@ -118,9 +118,9 @@ public final class LeftSidebar extends JPanel {
         actions.setOpaque(false);
         actions.setBorder(BorderFactory.createEmptyBorder(10, 14, 20, 14));
 
-        runBtn     = new RoundedButton("Run Simulation", "▶", ModernUI.SUCCESS);
-        clearBtn   = new RoundedButton("Clear All",      "✕", ModernUI.ORANGE);
-        exampleBtn = new RoundedButton("Load Example",   "★", ModernUI.ACCENT_BLUE);
+        runBtn     = new RoundedButton("Run Simulation", "play", ModernUI.SUCCESS);
+        clearBtn   = new RoundedButton("Clear All",      "x", ModernUI.ORANGE);
+        exampleBtn = new RoundedButton("Load Example",   "star", ModernUI.ACCENT_BLUE);
 
         actions.add(runBtn);
         actions.add(clearBtn);
@@ -401,6 +401,11 @@ public final class LeftSidebar extends JPanel {
                     g2.drawString(label, tx, ty);
 
                     g2.dispose();
+                }
+
+                @Override
+                public Dimension getPreferredSize() {
+                    return new Dimension(80, 32); // minimum size for the chip
                 }
             };
             btn.setContentAreaFilled(false);

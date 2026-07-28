@@ -261,11 +261,13 @@ public class ProcessQueuePanel extends RoundedPanel {
 
             for (int i = 0; i < maxVis; i++) {
                 int idx = from + i;
-                Process p = processes.get(idx);
-                int cx = zx + (zw - CHIP_W) / 2;
-                int cy = startY + i * (CHIP_H + CHIP_GAP);
-                float alpha = Math.max(0.35f, 1.0f - i * 0.14f);
-                drawChip(g2, cx, cy, p, COL_WAITING, alpha, i == 0);
+                if (idx >= 0 && idx < processes.size()) {
+                    Process p = processes.get(idx);
+                    int cx = zx + (zw - CHIP_W) / 2;
+                    int cy = startY + i * (CHIP_H + CHIP_GAP);
+                    float alpha = Math.max(0.35f, 1.0f - i * 0.14f);
+                    drawChip(g2, cx, cy, p, COL_WAITING, alpha, i == 0);
+                }
             }
 
             if (count > maxVis) {
@@ -289,24 +291,27 @@ public class ProcessQueuePanel extends RoundedPanel {
             int startY   = zy + (zh - totalH) / 2;
 
             for (int i = startIdx; i < count; i++) {
-                Process p    = processes.get(i);
-                boolean alloc = allocatedIds.contains(p.id);
-                Color col    = alloc ? COL_ALLOC : COL_REJECT;
-                int cx = zx + (zw - CHIP_W) / 2;
-                int cy = startY + (i - startIdx) * (CHIP_H + CHIP_GAP);
-                drawChip(g2, cx, cy, p, col, 0.9f, false);
+                if (i >= 0 && i < processes.size()) {
+                    Process p    = processes.get(i);
+                    boolean alloc = allocatedIds.contains(p.id);
+                    Color col    = alloc ? COL_ALLOC : COL_REJECT;
+                    int cx = zx + (zw - CHIP_W) / 2;
+                    int cy = startY + (i - startIdx) * (CHIP_H + CHIP_GAP);
+                    drawChip(g2, cx, cy, p, col, 0.9f, false);
 
-                // Status glyph
-                g2.setFont(new Font("Segoe UI", Font.BOLD, 13));
-                g2.setColor(col);
-                String sym = alloc ? "\u2713" : "\u2717";
-                g2.drawString(sym, cx + CHIP_W + 5, cy + CHIP_H / 2 + 5);
+                    // Status glyph
+                    g2.setFont(new Font("Segoe UI", Font.BOLD, 13));
+                    g2.setColor(col);
+                    String sym = alloc ? "\u2713" : "\u2717";
+                    g2.drawString(sym, cx + CHIP_W + 5, cy + CHIP_H / 2 + 5);
+                }
             }
         }
 
         private void drawFlying(Graphics2D g2, int procIdx, float t,
                                 int fromX, int fromY,
                                 int toX,   int toY, int H) {
+            if (procIdx < 0 || procIdx >= processes.size()) return;
             Process p   = processes.get(procIdx);
             boolean alloc = allocatedIds.contains(p.id);
             Color col   = alloc ? COL_ALLOC : COL_REJECT;
