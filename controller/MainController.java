@@ -70,27 +70,31 @@ public class MainController {
         lastFF = Simulator.firstFit(blocks, processes);
         lastBF = Simulator.bestFit(blocks, processes);
 
-        // Update Dashboard page
-        view.getVisualizerPanel().updateBlocks(lastFF.memoryBlocks, true);
+        // Pick result based on user-selected algorithm
+        String algo = view.getSidebar().getSelectedAlgorithm();
+        AllocationResult active = algo.equals("Best Fit") ? lastBF : lastFF;
 
-        // Also keep Results page in sync
+        // Update Dashboard visualizer with chosen algorithm result
+        view.getVisualizerPanel().updateBlocks(active.memoryBlocks, true);
+
+        // Keep Results page in sync (always shows both)
         view.getResultsPage().updateResults(lastFF, lastBF);
 
         // Update summary cards
-        double util  = lastFF.totalMemory > 0
-                       ? (lastFF.usedMemory * 100.0 / lastFF.totalMemory) : 0;
-        int alloc    = (int) lastFF.processes.stream().filter(p -> p.isAllocated).count();
+        double util = active.totalMemory > 0
+                      ? (active.usedMemory * 100.0 / active.totalMemory) : 0;
+        int alloc   = (int) active.processes.stream().filter(p -> p.isAllocated).count();
         view.getSummaryCards().updateStats(
             util,
-            lastFF.totalExternalFragmentation,
-            lastFF.totalInternalFragmentation,
-            lastFF.totalExternalFragmentation + lastFF.totalInternalFragmentation,
+            active.totalExternalFragmentation,
+            active.totalInternalFragmentation,
+            active.totalExternalFragmentation + active.totalInternalFragmentation,
             alloc,
-            lastFF.unallocatedProcesses.size()
+            active.unallocatedProcesses.size()
         );
 
-        // Start queue animation
-        view.getQueuePanel().startAnimation(lastFF);
+        // Start queue animation with chosen algorithm result
+        view.getQueuePanel().startAnimation(active);
     }
 
     // ── Clear ─────────────────────────────────────────────────────────────

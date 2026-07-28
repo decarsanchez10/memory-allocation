@@ -20,8 +20,9 @@ public final class LeftSidebar extends JPanel {
     private RoundedButton clearBtn;
     private RoundedButton exampleBtn;
 
-    private SidebarButton navDash;
-    private SidebarButton navResults;
+    private SidebarButton    navDash;
+    private SidebarButton    navResults;
+    private AlgorithmToggle  algoToggle;
 
     public LeftSidebar() {
         setPreferredSize(new Dimension(268, 0));
@@ -55,6 +56,14 @@ public final class LeftSidebar extends JPanel {
         col.add(navDash);
         col.add(vgap(4));
         col.add(navResults);
+        col.add(vgap(18));
+
+        // ── Algorithm selector ────────────────────────────────────────────
+        col.add(sectionLabel("ALGORITHM"));
+        col.add(vgap(8));
+        algoToggle = new AlgorithmToggle();
+        algoToggle.setAlignmentX(LEFT_ALIGNMENT);
+        col.add(algoToggle);
         col.add(vgap(20));
 
         // ── Memory config ─────────────────────────────────────────────────
@@ -302,19 +311,109 @@ public final class LeftSidebar extends JPanel {
         return list;
     }
 
-    public RoundedButton   getRunBtn()            { return runBtn; }
-    public RoundedButton   getClearBtn()           { return clearBtn; }
-    public RoundedButton   getExampleBtn()         { return exampleBtn; }
-    public JPanel          getBlocksContainer()    { return blocksContainer; }
-    public JPanel          getProcessesContainer() { return processesContainer; }
-    public RoundedTextField getNumBlocksField()    { return numBlocksField; }
-    public RoundedTextField getNumProcessesField() { return numProcessesField; }
-    public SidebarButton   getNavDash()            { return navDash; }
-    public SidebarButton   getNavResults()         { return navResults; }
+    public RoundedButton    getRunBtn()            { return runBtn; }
+    public RoundedButton    getClearBtn()           { return clearBtn; }
+    public RoundedButton    getExampleBtn()         { return exampleBtn; }
+    public JPanel           getBlocksContainer()    { return blocksContainer; }
+    public JPanel           getProcessesContainer() { return processesContainer; }
+    public RoundedTextField getNumBlocksField()     { return numBlocksField; }
+    public RoundedTextField getNumProcessesField()  { return numProcessesField; }
+    public SidebarButton    getNavDash()            { return navDash; }
+    public SidebarButton    getNavResults()         { return navResults; }
+
+    /** Returns "First Fit" or "Best Fit" based on the toggle selection. */
+    public String getSelectedAlgorithm()            { return algoToggle.getSelected(); }
 
     public void setActiveNav(SidebarButton active) {
         for (SidebarButton btn : new SidebarButton[]{navDash, navResults}) {
             btn.setActive(btn == active);
         }
+    }
+
+    // ── Algorithm Toggle ─────────────────────────────────────────────────
+    /**
+     * Pill-style two-option toggle: [First Fit] [Best Fit].
+     * The selected option gets a gradient fill; the other is ghost.
+     */
+    private static final class AlgorithmToggle extends JPanel {
+        private static final String OPT_FF = "First Fit";
+        private static final String OPT_BF = "Best Fit";
+        private String selected = OPT_FF;
+
+        AlgorithmToggle() {
+            setOpaque(false);
+            setLayout(new GridLayout(1, 2, 0, 0));
+            setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
+
+            JButton ff = makeChip(OPT_FF);
+            JButton bf = makeChip(OPT_BF);
+
+            ff.addActionListener(e -> { selected = OPT_FF; ff.repaint(); bf.repaint(); });
+            bf.addActionListener(e -> { selected = OPT_BF; ff.repaint(); bf.repaint(); });
+
+            add(ff);
+            add(bf);
+        }
+
+        private JButton makeChip(String label) {
+            JButton btn = new JButton() {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    Graphics2D g2 = (Graphics2D) g.create();
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+                    boolean active = label.equals(selected);
+                    int w = getWidth(), h = getHeight();
+
+                    if (active) {
+                        // Gradient accent fill
+                        g2.setPaint(new GradientPaint(
+                            0, 0, new Color(63, 101, 147),
+                            0, h, new Color(30, 70, 120)
+                        ));
+                        g2.fillRoundRect(0, 0, w, h, 10, 10);
+                        // Top sheen
+                        g2.setPaint(new GradientPaint(0, 0, new Color(255,255,255,40), 0, h/2, new Color(255,255,255,0)));
+                        g2.fillRoundRect(1, 1, w-2, h/2, 10, 10);
+                    } else {
+                        // Ghost background
+                        g2.setColor(new Color(255, 255, 255, 8));
+                        g2.fillRoundRect(0, 0, w, h, 10, 10);
+                    }
+
+                    // Border
+                    g2.setColor(active
+                        ? new Color(91, 134, 182, 180)
+                        : new Color(91, 134, 182, 50));
+                    g2.setStroke(new BasicStroke(1f));
+                    g2.drawRoundRect(0, 0, w-1, h-1, 10, 10);
+
+                    // Text
+                    Font font = active
+                        ? new Font("Segoe UI", Font.BOLD,  12)
+                        : new Font("Segoe UI", Font.PLAIN, 12);
+                    g2.setFont(font);
+                    FontMetrics fm = g2.getFontMetrics();
+                    g2.setColor(active ? Color.WHITE : new Color(160, 195, 230));
+                    int tx = (w - fm.stringWidth(label)) / 2;
+                    int ty = (h + fm.getAscent() - fm.getDescent()) / 2;
+                    g2.drawString(label, tx, ty);
+
+                    g2.dispose();
+                }
+            };
+            btn.setContentAreaFilled(false);
+            btn.setBorderPainted(false);
+            btn.setFocusPainted(false);
+            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            btn.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override public void mouseEntered(java.awt.event.MouseEvent e) { btn.repaint(); }
+                @Override public void mouseExited (java.awt.event.MouseEvent e) { btn.repaint(); }
+            });
+            return btn;
+        }
+
+        public String getSelected() { return selected; }
     }
 }
