@@ -79,9 +79,9 @@ public class SidebarButton extends JButton {
             g2.fill(new RoundRectangle2D.Float(0, 0, w, h, 10, 10));
         }
 
-        // ── Icon (Segoe UI Emoji so the glyph always renders) ─────────
+        // ── Icon (pick best font for the glyph) ─────────────────────
         int padL = 16;
-        Font iconFont = new Font("Segoe UI Emoji", Font.PLAIN, 15);
+        Font iconFont = pickIconFont(iconStr, 15);
         g2.setFont(iconFont);
         FontMetrics iconFm = g2.getFontMetrics();
         int baseline = (h + iconFm.getAscent() - iconFm.getDescent()) / 2;
@@ -99,6 +99,17 @@ public class SidebarButton extends JButton {
         g2.drawString(labelText, padL + iconW + 9, textBaseline);
 
         g2.dispose();
-        // intentionally skip super.paintComponent – we own all painting
+    }
+
+    /** Picks the first font that can display the glyph. */
+    private static Font pickIconFont(String s, int size) {
+        if (s == null || s.isEmpty()) return new Font("Segoe UI", Font.PLAIN, size);
+        String[] candidates = {"Segoe UI Symbol", "Segoe UI Emoji", "Segoe UI"};
+        int cp = s.codePointAt(0);
+        for (String name : candidates) {
+            Font f = new Font(name, Font.PLAIN, size);
+            if (f.canDisplay(cp)) return f;
+        }
+        return new Font("Segoe UI", Font.PLAIN, size);
     }
 }
