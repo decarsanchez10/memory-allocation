@@ -66,18 +66,19 @@ public class RoundedButton extends JButton {
         g2.setStroke(new BasicStroke(1f));
         g2.draw(new RoundRectangle2D.Float(0, 0, w - 1, h - 1, arc, arc));
 
-        // ── Measure both parts ────────────────────────────────────────
-        Font iconFont = new Font("Segoe UI Emoji", Font.PLAIN, 13);
+        // ── Pick the right font for the icon glyph ────────────────────
+        Font iconFont = pickIconFont(iconStr, 13);
         Font textFont = new Font("Segoe UI", Font.BOLD, 13);
+
         g2.setFont(iconFont);
-        FontMetrics ifm  = g2.getFontMetrics();
+        FontMetrics ifm = g2.getFontMetrics();
         int iconW = iconStr.isEmpty() ? 0 : ifm.stringWidth(iconStr);
 
         g2.setFont(textFont);
-        FontMetrics tfm  = g2.getFontMetrics();
+        FontMetrics tfm = g2.getFontMetrics();
         int textW = tfm.stringWidth(labelText);
 
-        int gap   = iconStr.isEmpty() ? 0 : 7;
+        int gap    = iconStr.isEmpty() ? 0 : 6;
         int totalW = iconW + gap + textW;
         int startX = (w - totalW) / 2;
 
@@ -96,8 +97,23 @@ public class RoundedButton extends JButton {
         g2.drawString(labelText, startX + iconW + gap, textBaseline);
 
         g2.dispose();
-        // No super.paintComponent call – we own all painting
     }
+
+    /**
+     * Picks the first font that can display the given string.
+     * Priority: Segoe UI Symbol → Segoe UI Emoji → Segoe UI.
+     */
+    private static Font pickIconFont(String s, int size) {
+        if (s == null || s.isEmpty()) return new Font("Segoe UI", Font.PLAIN, size);
+        String[] candidates = {"Segoe UI Symbol", "Segoe UI Emoji", "Segoe UI"};
+        int cp = s.codePointAt(0);
+        for (String name : candidates) {
+            Font f = new Font(name, Font.PLAIN, size);
+            if (f.canDisplay(cp)) return f;
+        }
+        return new Font("Segoe UI", Font.PLAIN, size);
+    }
+
 
     // ── Colour helpers ────────────────────────────────────────────────
     private static Color brighten(Color c, int amt) {
