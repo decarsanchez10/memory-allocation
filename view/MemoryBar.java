@@ -105,7 +105,7 @@ public class MemoryBar extends JPanel {
 
         // Shadow pass
         g2.setFont(boldFont);
-        FontMetrics fm = g2.getFontMetrics();
+
         int tx = 12, ty = h / 2;
 
         g2.setColor(new Color(0, 0, 0, 120));

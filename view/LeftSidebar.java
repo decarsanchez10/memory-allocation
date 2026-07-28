@@ -2,13 +2,14 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
+
 
 /**
  * LeftSidebar with a gradient background, logo with gradient text icon,
  * and better-spaced navigation buttons.
  */
-public class LeftSidebar extends JPanel {
+public final class LeftSidebar extends JPanel {
+    private static final long serialVersionUID = 1L;
     private RoundedTextField numBlocksField;
     private RoundedTextField numProcessesField;
     private JPanel blocksContainer;
@@ -52,8 +53,8 @@ public class LeftSidebar extends JPanel {
         logoIcon.setPreferredSize(new Dimension(40, 40));
         logoIcon.setHorizontalAlignment(SwingConstants.CENTER);
 
-        JLabel logoText = new JLabel("Memory Allocator");
-        logoText.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        JLabel logoText = new JLabel("Memory Allocation Simulator");
+        logoText.setFont(new Font("Segoe UI", Font.BOLD, 15));
         logoText.setForeground(ModernUI.TEXT_PRIMARY);
 
         logoPanel.add(logoIcon);
@@ -126,9 +127,9 @@ public class LeftSidebar extends JPanel {
         actionsPanel.setOpaque(false);
         actionsPanel.setBorder(BorderFactory.createEmptyBorder(12, 0, 0, 0));
 
-        runBtn = new RoundedButton("Run Simulation", "\u25B6", ModernUI.SUCCESS); // Play
-        clearBtn = new RoundedButton("Clear All", "\u2716", ModernUI.ORANGE); // X
-        exampleBtn = new RoundedButton("Load Example", "\u25C6", ModernUI.ACCENT_BLUE); // Diamond
+        runBtn = new RoundedButton("Run Simulation", ">", ModernUI.SUCCESS); 
+        clearBtn = new RoundedButton("Clear All", "X", ModernUI.ORANGE); 
+        exampleBtn = new RoundedButton("Load Example", "+", ModernUI.ACCENT_BLUE); 
 
         actionsPanel.add(runBtn);
         actionsPanel.add(clearBtn);

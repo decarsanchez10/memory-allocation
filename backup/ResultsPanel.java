@@ -1,9 +1,11 @@
+package backup;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.util.List;
+
 
 public class ResultsPanel extends RoundedPanel {
     private JTabbedPane tabbedPane;
