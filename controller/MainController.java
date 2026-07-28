@@ -43,11 +43,6 @@ public class MainController {
             view.navigateTo(MainDashboardView.PAGE_RESULTS);
             sb.setActiveNav(sb.getNavResults());
         });
-
-        sb.getNavSettings().addActionListener(e -> {
-            view.navigateTo(MainDashboardView.PAGE_SETTINGS);
-            sb.setActiveNav(sb.getNavSettings());
-        });
     }
 
     // ── Run Simulation ────────────────────────────────────────────────────
@@ -77,7 +72,6 @@ public class MainController {
 
         // Update Dashboard page
         view.getVisualizerPanel().updateBlocks(lastFF.memoryBlocks, true);
-        view.getResultsPanel().updateResults(lastFF, lastBF);
 
         // Also keep Results page in sync
         view.getResultsPage().updateResults(lastFF, lastBF);
@@ -109,7 +103,6 @@ public class MainController {
         lastBF = new AllocationResult();
 
         view.getVisualizerPanel().updateBlocks(new ArrayList<>(), false);
-        view.getResultsPanel().updateResults(lastFF, lastBF);
         view.getResultsPage().updateResults(lastFF, lastBF);
         view.getSummaryCards().updateStats(0, 0, 0, 0, 0, 0);
     }
