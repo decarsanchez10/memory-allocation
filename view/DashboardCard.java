@@ -15,8 +15,8 @@ public class DashboardCard extends RoundedPanel {
     public DashboardCard(String title, String initialValue, String iconText, Color accentColor) {
         super(ModernUI.RADIUS_ROUND, ModernUI.CARD_BG);
         this.accentColor = accentColor;
-        setLayout(new BorderLayout(0, 8));
-        setBorder(BorderFactory.createEmptyBorder(18, 18, 18, 18));
+        setLayout(new BorderLayout(0, 4));
+        setBorder(BorderFactory.createEmptyBorder(12, 16, 12, 16));
 
         // ── Icon circle ──────────────────────────────────────────────────
         JPanel iconCircle = new JPanel() {
@@ -37,15 +37,15 @@ public class DashboardCard extends RoundedPanel {
         };
         iconCircle.setOpaque(false);
         iconCircle.setLayout(new BorderLayout());
-        iconCircle.setPreferredSize(new Dimension(44, 44));
+        iconCircle.setPreferredSize(new Dimension(32, 32));
 
         JLabel iconLabel = new JLabel(iconText, SwingConstants.CENTER);
-        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
+        iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
         iconLabel.setForeground(accentColor);
         iconCircle.add(iconLabel, BorderLayout.CENTER);
 
         // ── Title + icon row ─────────────────────────────────────────────
-        JPanel topRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        JPanel topRow = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         topRow.setOpaque(false);
         topRow.add(iconCircle);
 
@@ -56,9 +56,9 @@ public class DashboardCard extends RoundedPanel {
 
         // ── Value ────────────────────────────────────────────────────────
         valueLabel = new JLabel(initialValue);
-        valueLabel.setFont(ModernUI.FONT_VALUE);
+        valueLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         valueLabel.setForeground(ModernUI.TEXT_PRIMARY);
-        valueLabel.setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
+        valueLabel.setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
 
         add(topRow, BorderLayout.NORTH);
         add(valueLabel, BorderLayout.CENTER);

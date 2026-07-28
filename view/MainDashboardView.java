@@ -87,7 +87,7 @@ public class MainDashboardView extends JFrame {
 
         // Top stat cards
         summaryCards = new SummaryCardsPanel();
-        summaryCards.setPreferredSize(new Dimension(0, 110));
+        summaryCards.setPreferredSize(new Dimension(0, 135));
         page.add(summaryCards, BorderLayout.NORTH);
 
         // Visualizer (top) + Results table (bottom), draggable
